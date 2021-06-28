@@ -21,9 +21,11 @@ For my use case, the project allows for:
 - 18 awg cable
 
 ## Before you start
-Rename `secrets.example.h` to `secrets.h` and fill in your credentials
+1. Rename `secrets.example.h` to `secrets.h` and fill in your credentials
+2. Check that the PINs match your setup
+3. Set up the total number of LEDs and number of steps
 
-
+## Disclaimer
 This is **NOT** a tutorial, this is the code used in my project. Feel free to use it for  non-commercial purposes but remember that I take no responsibility for any issues you might encounter, damaged electronics, house electrics etc.
 
 Always be careful when working with electricity, especially him voltage from the mains, if you are uncertain, consult an electrician. Do not endanger yourself or your property. 
