@@ -1,14 +1,9 @@
 # staircase-lights
 
-Original project by @snikogos https://www.instructables.com/LED-Stair-Lighting/
-
-Further adapted for nodeMCU by @daromer2 https://github.com/daromer2/StairLights
-
-The code base is heavily modified. Code and variables have been cleaned.
-
 For my use case, the project allows for:
 - MQTT commands to set fixed lighting effects
 - OTA updates
+- Home Assistant integration
 
 ## Hardware
 - nodeMCU v3
@@ -24,6 +19,14 @@ For my use case, the project allows for:
 1. Rename `secrets.example.h` to `secrets.h` and fill in your credentials
 2. Check that the PINs match your setup
 3. Set up the total number of LEDs and number of steps
+
+## Credits
+
+Original project by @snikogos https://www.instructables.com/LED-Stair-Lighting/
+
+Further adapted for nodeMCU by @daromer2 https://github.com/daromer2/StairLights
+
+More features regarding Home Assistant inspired from @bruhautomation https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Disclaimer
 This is **NOT** a tutorial, this is the code used in my project. Feel free to use it for  non-commercial purposes but remember that I take no responsibility for any issues you might encounter, damaged electronics, house electrics etc.
