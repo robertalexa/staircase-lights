@@ -21,6 +21,10 @@ const int totalLeds = 40;      // Total number of LEDs
 const int ledsPerStep = totalLeds / steps; // Total LEDs per step
 const int brightness = 50;      // Adjust LEDs brightness
 
+const char* stateTopic = "esp/stairs/state";
+const char* effectTopic = "esp/stairs/effect";
+const char* lwtTopic = "esp/stairs/lwt";
+
 int ledStatus = 0;
 int pirTopValue = LOW;          // Variable to hold the PIR status
 int pirBottomValue = LOW;       // Variable to hold the PIR status
@@ -30,9 +34,7 @@ int direction = 0;              // Direction of travel; init 0, 1 top to bottom,
 unsigned long pirTimeout = 60000;  // timestamp to remember when the PIR was triggered.
 unsigned long debugTimeout = 0;
 
-const char* stateTopic = "esp/stairs/commands";
-const char* setTopic = "esp/stairs/set";
-const char* lwtTopic = "esp/stairs/lwt";
+String currentPreset = "off";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -78,9 +80,9 @@ void setup_mqtt()
         // Attempt to connect
         if (client.connect(SECRET_DEVICE, SECRET_MQTT_USER, SECRET_MQTT_PASS, lwtTopic, 0, 1, "Offline")) {
             Serial.println("MQTT connected");
-            client.subscribe(setTopic);
+            client.subscribe(effectTopic);
             client.publish(lwtTopic, "Online", true);
-            client.publish(stateTopic, "OFF");
+            client.publish(stateTopic, "off");
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
@@ -110,6 +112,46 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
     message[length] = '\0';
     Serial.println(message);
+
+    String sMessage = (char*)message;
+
+    if (sMessage == "red") {
+        if (currentPreset != "red") {
+            strip.fill(strip.Color(255, 0, 0));
+            strip.show();
+            currentPreset = "red";
+        }
+    } else if (sMessage == "green") {
+        if (currentPreset != "green") {
+            strip.fill(strip.Color(0, 255, 0));
+            strip.show();
+            currentPreset = "green";
+        }
+    } else if (sMessage == "blue") {
+        if (currentPreset != "blue") {
+            strip.fill(strip.Color(0, 0, 255));
+            strip.show();
+            currentPreset = "blue";
+        }
+    } else if (sMessage == "orange") {
+        if (currentPreset != "orange") {
+            strip.fill(strip.Color(255, 165, 0));
+            strip.show();
+            currentPreset = "orange";
+        }
+    } else if (sMessage == "pink") {
+        if (currentPreset != "pink") {
+            strip.fill(strip.Color(255, 192, 203));
+            strip.show();
+            currentPreset = "pink";
+        }
+    } else {
+        if (currentPreset != "off") {
+            strip.fill();
+            strip.show();
+            currentPreset = "off";
+        }
+    }
 }
 
 // Fade light each step strip
@@ -168,7 +210,8 @@ void setup()
 
     strip.begin();
     strip.setBrightness(brightness);
-    strip.clear();
+    strip.fill();
+    strip.show();
 
     delay(2000); // it takes the sensor 2 seconds to scan the area around it before it can detect infrared presence.
 }
@@ -193,6 +236,11 @@ void loop()
     client.loop();
 
     ArduinoOTA.handle();
+
+    if (currentPreset != "off") {
+        delay(10);
+        return;
+    }
 
     // Constantly poll the sensors
     pirTopValue = digitalRead(pirTop);
