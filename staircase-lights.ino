@@ -115,38 +115,28 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     String sMessage = (char*)message;
 
-    if (sMessage == "red") {
-        if (currentPreset != "red") {
+    if (sMessage != currentPreset) {
+        if (sMessage == "red") {
             strip.fill(strip.Color(255, 0, 0));
             strip.show();
             currentPreset = "red";
-        }
-    } else if (sMessage == "green") {
-        if (currentPreset != "green") {
+        } else if (sMessage == "green") {
             strip.fill(strip.Color(0, 255, 0));
             strip.show();
             currentPreset = "green";
-        }
-    } else if (sMessage == "blue") {
-        if (currentPreset != "blue") {
+        } else if (sMessage == "blue") {
             strip.fill(strip.Color(0, 0, 255));
             strip.show();
             currentPreset = "blue";
-        }
-    } else if (sMessage == "orange") {
-        if (currentPreset != "orange") {
+        } else if (sMessage == "orange") {
             strip.fill(strip.Color(255, 165, 0));
             strip.show();
             currentPreset = "orange";
-        }
-    } else if (sMessage == "pink") {
-        if (currentPreset != "pink") {
+        } else if (sMessage == "pink") {
             strip.fill(strip.Color(255, 192, 203));
             strip.show();
             currentPreset = "pink";
-        }
-    } else {
-        if (currentPreset != "off") {
+        } else {
             strip.fill();
             strip.show();
             currentPreset = "off";
