@@ -774,7 +774,7 @@ void loop()
         delay(10);
         return;
     } else {
-        setColor(0, 0, 0);
+        showleds();
     }
 
     // Motion Lights - only get here if stateOn is false (e.g no manual colour/effect)
