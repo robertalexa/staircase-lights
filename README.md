@@ -11,6 +11,7 @@ For my use case, the project allows for:
 - 1 x LDR
 - 1 x 100 kOhm resistor for the LDR
 - 1 x 500 Ohm resistor for the LED Data wire
+- 1 x 1000uF capacitor for the power supply, between negative and positive.
 - WS2812B LEDs
 - 5V power supply - make sure you get a power supply able to supply the required Amps, plus 20% to allow for good performance. The closer to the limit you use a PSU, the more heat it will generate and the worst performance it will have.
 - 18 awg cable
