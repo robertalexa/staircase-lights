@@ -1,0 +1,50 @@
+light:
+  - platform: mqtt
+    schema: json
+    name: "Staircase Lights"
+    state_topic: "esp/stairs/state"
+    command_topic: "esp/stairs/set"
+    availability_topic: "esp/stairs/lwt"
+    effect: true
+    effect_list:
+      - solid
+      - bpm
+      - candy cane  
+      - christmas cane
+      - christmas alternate
+      - confetti  
+      - cyclon rainbow  
+      - dots
+      - fireworks
+      - hue breathe
+      - juggle  
+      - lightning
+      - noise  
+      - police
+      - rainbow  
+      - sinelon
+      - twinkle
+    brightness: true
+    rgb: true
+    optimistic: false
+    qos: 0
+
+input_number:
+  staircase_lights_animation_speed:
+    name: "Staircase Lights Animation Speed"
+    initial: 150
+    min: 1
+    max: 150
+    step: 10
+    icon: mdi:play-speed
+
+automation: 
+  - alias: "Staircase Lights Animation Speed"
+    trigger:
+      platform: state
+      entity_id: input_number.staircase_lights_animation_speed
+    action:
+      service: mqtt.publish
+      data:
+        topic: "esp/stairs/set"
+        payload: '{"transition":{{ trigger.to_state.state | int }}}'
