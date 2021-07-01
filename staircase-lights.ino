@@ -22,7 +22,7 @@ const int ledsPerStep = totalLeds / steps; // Total LEDs per step
 const int brightness = 50;      // Adjust LEDs brightness
 
 const char* stateTopic = "esp/stairs/state";
-const char* effectTopic = "esp/stairs/effect";
+const char* setTopic = "esp/stairs/set";
 const char* lwtTopic = "esp/stairs/lwt";
 
 int ledStatus = 0;
@@ -78,10 +78,10 @@ void setup_mqtt()
         Serial.println("");
         Serial.println("Attempting MQTT connection...");
         // Attempt to connect
-        if (client.connect(SECRET_DEVICE, SECRET_MQTT_USER, SECRET_MQTT_PASS, lwtTopic, 0, 1, "Offline")) {
+        if (client.connect(SECRET_DEVICE, SECRET_MQTT_USER, SECRET_MQTT_PASS, lwtTopic, 0, 1, "offline")) {
             Serial.println("MQTT connected");
-            client.subscribe(effectTopic);
-            client.publish(lwtTopic, "Online", true);
+            client.subscribe(setTopic);
+            client.publish(lwtTopic, "online", true);
             client.publish(stateTopic, "off");
         } else {
             Serial.print("failed, rc=");
