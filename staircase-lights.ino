@@ -312,50 +312,51 @@ void callback(char* topic, byte* payload, unsigned int length)
 /********************************** START PROCESS JSON*****************************************/
 bool processJson(char* message)
 {
-    StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
+    StaticJsonDocument<BUFFER_SIZE> doc;
 
-    JsonObject& root = jsonBuffer.parseObject(message);
+    DeserializationError error = deserializeJson(doc, message);
 
-    if (!root.success()) {
-        Serial.println("parseObject() failed");
+    if (error) {
+        Serial.print("deserializeJson() failed with code ");
+        Serial.println(error.c_str());
         return false;
     }
 
-    if (root.containsKey("state")) {
-        if (strcmp(root["state"], on_cmd) == 0) {
+    if (doc.containsKey("state")) {
+        if (strcmp(doc["state"], on_cmd) == 0) {
             stateOn = true;
-        } else if (strcmp(root["state"], off_cmd) == 0) {
+        } else if (strcmp(doc["state"], off_cmd) == 0) {
             stateOn = false;
         }
     }
 
-    if (root.containsKey("color")) {
-        red = root["color"]["r"];
-        green = root["color"]["g"];
-        blue = root["color"]["b"];
+    if (doc.containsKey("color")) {
+        red = doc["color"]["r"];
+        green = doc["color"]["g"];
+        blue = doc["color"]["b"];
     }
 
-    if (root.containsKey("color_temp")) {
+    if (doc.containsKey("color_temp")) {
         //temp comes in as mireds, need to convert to kelvin then to RGB
-        int color_temp = root["color_temp"];
+        int color_temp = doc["color_temp"];
         unsigned int kelvin  = 1000000 / color_temp; //MILLION / color_temp;
 
         temp2rgb(kelvin);
 
     }
 
-    if (root.containsKey("brightness")) {
-        brightness = root["brightness"];
+    if (doc.containsKey("brightness")) {
+        brightness = doc["brightness"];
     }
 
-    if (root.containsKey("effect")) {
-        effect = root["effect"];
+    if (doc.containsKey("effect")) {
+        effect = doc["effect"];
         effectString = effect;
         twinklecounter = 0; //manage twinklecounter
     }
 
-    if (root.containsKey("transition")) {
-        transitionTime = root["transition"];
+    if (doc.containsKey("transition")) {
+        transitionTime = doc["transition"];
     } else if ( effectString == "solid") {
         transitionTime = 0;
     }
@@ -367,22 +368,25 @@ bool processJson(char* message)
 /********************************** START SEND STATE*****************************************/
 void sendState()
 {
-    StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
+    StaticJsonDocument<BUFFER_SIZE> doc;
 
-    JsonObject& root = jsonBuffer.createObject();
-
-    root["state"] = (stateOn) ? on_cmd : off_cmd;
-    JsonObject& color = root.createNestedObject("color");
+    doc["state"] = (stateOn) ? on_cmd : off_cmd;
+    JsonObject color = doc.createNestedObject("color");
     color["r"] = red;
     color["g"] = green;
     color["b"] = blue;
 
-    root["brightness"] = brightness;
-    root["effect"] = effectString.c_str();
-    root["transition"] = transitionTime;
+    doc["brightness"] = brightness;
+    doc["effect"] = effectString.c_str();
+    doc["transition"] = transitionTime;
 
-    char buffer[root.measureLength() + 1];
-    root.printTo(buffer, sizeof(buffer));
+    //char buffer[doc.measureLength() + 1];
+    //doc.printTo(buffer, sizeof(buffer));
+
+    size_t docSize = measureJson(doc)+1;
+    char buffer[docSize];
+
+    serializeJson(doc);
 
     client.publish(light_state_topic, buffer, true);
 }
