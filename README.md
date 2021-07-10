@@ -29,7 +29,7 @@ Original project by @snikogos https://www.instructables.com/LED-Stair-Lighting/
 
 Further adapted for nodeMCU by @daromer2 https://github.com/daromer2/StairLights
 
-More features regarding Home Assistant and effects inspired from @bruhautomation https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
+More features regarding Home Assistant and effects inspired from @bkpsu https://github.com/bkpsu/ESP-MQTT-JSON-Digital-LEDs which is a fork from @bruhautomation https://github.com/bruhautomation/ESP-MQTT-JSON-Digital-LEDs
 
 ## Disclaimer
 This is **NOT** a tutorial, this is the code used in my project, as a way for me to store it and remind myself what I've done. Feel free to use it for non-commercial purposes but remember that I take no responsibility for any issues you might encounter, damaged electronics, house electrics etc.
