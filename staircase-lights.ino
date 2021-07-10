@@ -380,9 +380,6 @@ void sendState()
     doc["effect"] = effectString.c_str();
     doc["transition"] = transitionTime;
 
-    //char buffer[doc.measureLength() + 1];
-    //doc.printTo(buffer, sizeof(buffer));
-
     size_t docSize = measureJson(doc)+1;
     char buffer[docSize];
 
