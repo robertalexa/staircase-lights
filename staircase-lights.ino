@@ -386,7 +386,7 @@ void sendState()
     size_t docSize = measureJson(doc)+1;
     char buffer[docSize];
 
-    serializeJson(doc);
+    serializeJson(doc, buffer, docSize);
 
     client.publish(light_state_topic, buffer, true);
 }
