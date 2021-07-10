@@ -517,6 +517,7 @@ void effects()
 {
     //EFFECT BPM
     if (effectString == "bpm") {
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         uint8_t BeatsPerMinute = 62;
         CRGBPalette16 palette = PartyColors_p;
         uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
@@ -580,7 +581,7 @@ void effects()
 
     //EFFECT CONFETTI
     if (effectString == "confetti" ) {
-        fadeToBlackBy( leds, NUM_LEDS, 25);
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         int pos = random16(NUM_LEDS);
         leds[pos] += CRGB(realRed + random8(64), realGreen, realBlue);
         if (transitionTime == 0 or transitionTime == NULL) {
@@ -592,6 +593,7 @@ void effects()
 
     //EFFECT CYCLON RAINBOW
     if (effectString == "cyclon rainbow") {                    //Single Dot Down
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         static uint8_t hue = 0;
         // First slide the led in one direction
         for (int i = 0; i < NUM_LEDS; i++) {
@@ -622,6 +624,7 @@ void effects()
 
     //EFFECT DOTS
     if (effectString == "dots") {
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         uint8_t inner = beatsin8(bpm, NUM_LEDS / 4, NUM_LEDS / 4 * 3);
         uint8_t outer = beatsin8(bpm, 0, NUM_LEDS - 1);
         uint8_t middle = beatsin8(bpm, NUM_LEDS / 3, NUM_LEDS / 3 * 2);
@@ -654,6 +657,7 @@ void effects()
 
     //EFFECT LIGHTNING
     if (effectString == "lightning") {
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         twinklecounter = twinklecounter + 1;                     //Resets strip if previous animation was running
         if (twinklecounter < 2) {
             FastLED.clear();
@@ -717,7 +721,7 @@ void effects()
 
     //EFFECT SINELON
     if (effectString == "sinelon") {
-        fadeToBlackBy( leds, NUM_LEDS, 20);
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         int pos = beatsin16(13, 0, NUM_LEDS - 1);
         leds[pos] += CRGB(realRed, realGreen, realBlue);
         if (transitionTime == 0 or transitionTime == NULL) {
@@ -785,6 +789,7 @@ void effects()
 
     //EFFECT NOISE
     if (effectString == "noise") {
+        fadeToBlackBy(leds, NUM_LEDS, 20);
         for (int i = 0; i < NUM_LEDS; i++) {                                     // Just onE loop to fill up the LED array as all of the pixels change.
             uint8_t index = inoise8(i * scale, dist + i * scale) % 255;            // Get a value from the noise function. I'm using both x and y axis.
             leds[i] = ColorFromPalette(currentPalette, index, 255, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
