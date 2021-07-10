@@ -48,8 +48,8 @@ byte red = 255;
 byte green = 255;
 byte blue = 255;
 
-byte desiredBrightness = 127;               // Adjust LEDs brightness. 0 to 255
-byte brightness = desiredBrightness;
+byte motionBrightness = 25;               // Adjust LEDs brightness. 0 to 255
+byte brightness = 127;
 const int steps = 5;                        // Total number of steps
 const int ledsPerStep = NUM_LEDS / steps;   // Total LEDs per step
 
@@ -432,20 +432,17 @@ void loop()
 
     ArduinoOTA.handle();
 
+    // Manual LEDs control via MQTT
     if (stateOn) {
+        FastLED.setBrightness(brightness);
         effects();
         delay(10);
         return;
     }
 
     // Motion Lights - only get here if stateOn is false (e.g no manual colour/effect)
-
     showleds();
-    if (brightness != desiredBrightness) {
-        brightness = desiredBrightness;
-        FastLED.setBrightness(desiredBrightness);
-        FastLED.show();
-    }
+    FastLED.setBrightness(motionBrightness);
 
     // Constantly poll the sensors
     pirTopValue = digitalRead(pirTop);
@@ -600,7 +597,7 @@ void effects()
         // First slide the led in one direction
         for (int i = 0; i < NUM_LEDS; i++) {
             // Set the i'th led to red
-            leds[i] = CHSV(hue++, 255, 255);
+            leds[i] = CHSV(hue++, 255, brightness);
             // Show the leds
             delayMultiplier = 1;
             showleds();
@@ -612,7 +609,7 @@ void effects()
         }
         for (int i = (NUM_LEDS) - 1; i >= 0; i--) {
             // Set the i'th led to red
-            leds[i] = CHSV(hue++, 255, 255);
+            leds[i] = CHSV(hue++, 255, brightness);
             // Show the leds
             delayMultiplier = 1;
             showleds();
@@ -672,7 +669,7 @@ void effects()
                 dimmer = random8(1, 3);          // return strokes are brighter than the leader
             }
 
-            fill_solid(leds + ledstart, ledlen, CHSV(255, 0, 255 / dimmer));
+            fill_solid(leds + ledstart, ledlen, CHSV(255, 0, brightness / dimmer));
             showleds();    // Show a section of LED's
             delay(random8(4, 10));              // each flash only lasts 4-10 milliseconds
 
@@ -698,8 +695,8 @@ void effects()
         int idexR = idex;
         int idexB = antipodal_index(idexR);
         int thathue = (thishuepolice + 160) % 255;
-        leds[idexR] = CHSV(thishuepolice, thissat, 255);
-        leds[idexB] = CHSV(thathue, thissat, 255);
+        leds[idexR] = CHSV(thishuepolice, thissat, brightness);
+        leds[idexB] = CHSV(thathue, thissat, brightness);
         if (transitionTime == 0 or transitionTime == NULL) {
             transitionTime = 30;
         }
@@ -765,7 +762,7 @@ void effects()
         static bool toggle = 1;
         static uint8_t brightness_index = 0;
         fill_solid(leds, NUM_LEDS, CHSV(hue_index, 255, brightness_index));
-        if (brightness_index >= 255) {
+        if (brightness_index >= brightness) {
             toggle = 0;
             hue_index = hue_index + 10;
         } else if (brightness_index <= 0) {
@@ -787,27 +784,27 @@ void effects()
         showleds();
     }
 
+    //EFFECT NOISE
+    if (effectString == "noise") {
+        for (int i = 0; i < NUM_LEDS; i++) {                                     // Just onE loop to fill up the LED array as all of the pixels change.
+            uint8_t index = inoise8(i * scale, dist + i * scale) % 255;            // Get a value from the noise function. I'm using both x and y axis.
+            leds[i] = ColorFromPalette(currentPalette, index, 255, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
+        }
+        dist += beatsin8(10, 1, 4);                                              // Moving along the distance (that random number we started out with). Vary it a bit with a sine wave.
+        // In some sketches, I've used millis() instead of an incremented counter. Works a treat.
+        if (transitionTime == 0 or transitionTime == NULL) {
+            transitionTime = 0;
+        }
+        delayMultiplier = 1;
+        showleds();
+    }
+
     EVERY_N_MILLISECONDS(10)
     {
 
         nblendPaletteTowardPalette(currentPalette, targetPalette, maxChanges);  // FOR NOISE ANIMATIon
         {
             gHue++;
-        }
-
-        //EFFECT NOISE
-        if (effectString == "noise") {
-            for (int i = 0; i < NUM_LEDS; i++) {                                     // Just onE loop to fill up the LED array as all of the pixels change.
-                uint8_t index = inoise8(i * scale, dist + i * scale) % 255;            // Get a value from the noise function. I'm using both x and y axis.
-                leds[i] = ColorFromPalette(currentPalette, index, 255, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
-            }
-            dist += beatsin8(10, 1, 4);                                              // Moving along the distance (that random number we started out with). Vary it a bit with a sine wave.
-            // In some sketches, I've used millis() instead of an incremented counter. Works a treat.
-            if (transitionTime == 0 or transitionTime == NULL) {
-                transitionTime = 0;
-            }
-            delayMultiplier = 1;
-            showleds();
         }
     }
 
@@ -951,9 +948,9 @@ void showleds()
     delay(1);
 
     if (stateOn) {
-        FastLED.setBrightness(brightness);  //EXECUTE EFFECT COLOR
-        FastLED.show();
-        if (transitionTime > 0 && transitionTime < 250) {  //Sets animation speed based on receieved value
+        FastLED.setBrightness(brightness);
+        FastLED.show();                                     //EXECUTE EFFECT COLOR
+        if (transitionTime > 0 && transitionTime < 250) {   //Sets animation speed based on received value
             FastLED.delay(transitionTime / 10 * delayMultiplier); //1000 / transitionTime);
             //delay(10*transitionTime);
         }
