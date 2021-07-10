@@ -39,6 +39,9 @@ This will make the following available:
 - WifiUdp
 - ArduinoOTA
 
+## Notes
+The code contains relics of support for transition, and the HA config for it. I am not using it so I have not tested it. I have however decided to leave it in case I change my mind one day.
+
 ## Credits
 
 Original project by @snikogos https://www.instructables.com/LED-Stair-Lighting/
