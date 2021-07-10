@@ -1,5 +1,5 @@
 # staircase-lights
-#### ESP8266 NodeMCU v3 motion activated staircase lights dependant on ambient light and manual control with full RGB and pre-built effects
+#### ESP8266 NodeMCU v3 motion activated staircase lights dependant on ambient light and manual control with full RGB and pre-built effects via MQTT as JSON
 
 For my use case, the project allows for:
 - Set brightness, RGB colour and pre-built lighting effects via MQTT commands
