@@ -1,4 +1,5 @@
 # staircase-lights
+#### ESP8266 NodeMCU v3 motion activated staircase lights dependant on ambient light and manual control with full RGB and pre-built effects
 
 For my use case, the project allows for:
 - Set brightness, RGB colour and pre-built lighting effects via MQTT commands
@@ -22,6 +23,21 @@ For my use case, the project allows for:
 2. Check that the device PINs match your setup
 3. Set up the total number of LEDs and number of steps
 4. Set up desired starting brightness (can be adjusted via MQTT) as well as motion brightness (can't be adjusted)
+
+## Libraries and versions
+At the time of the build the software uses and is compatible with the following:
+- ArduinoJson 5.13.5
+- PubSubClient 2.8.0
+- FastLED 3.4.0
+
+And of course support for ESP8266 - add the following to your board manager
+http://arduino.esp8266.com/stable/package_esp8266com_index.json
+
+This will make the following available:
+- ESP8266Wifi
+- ESP8266mDNS
+- WifiUdp
+- ArduinoOTA
 
 ## Credits
 
