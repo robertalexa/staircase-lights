@@ -26,7 +26,6 @@ const char* on_cmd = "ON";
 const char* off_cmd = "OFF";
 const char* effect = "solid";
 String effectString = "solid";
-String oldeffectString = "solid";
 
 
 /*****************************  MQTT JSON Definitions **********************************/
@@ -66,7 +65,6 @@ int ldrSensorValue = 0;         // LDR startup value
 int direction = 0;              // Direction of travel; init 0, 1 top to bottom, 2 bottom to top
 
 unsigned long pirTimeout = 60000;  // timestamp to remember when the PIR was triggered.
-unsigned long debugTimeout = 0;
 
 
 /*******************************  GLOBALS for FADE *************************************/
