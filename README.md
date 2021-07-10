@@ -26,7 +26,7 @@ For my use case, the project allows for:
 
 ## Libraries and versions
 At the time of the build the software uses and is compatible with the following:
-- ArduinoJson 5.13.5
+- ArduinoJson 6.18.0
 - PubSubClient 2.8.0
 - FastLED 3.4.0
 
