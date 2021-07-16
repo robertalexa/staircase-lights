@@ -759,34 +759,6 @@ void effects()
         showleds();
     }
 
-    //EFFECT "Hue Breathe"
-    if (effectString == "hue breathe") {
-        static uint8_t hue_index = 0;
-        static bool toggle = 1;
-        static uint8_t brightness_index = 0;
-        fill_solid(leds, NUM_LEDS, CHSV(hue_index, 255, brightness_index));
-        if (brightness_index >= brightness) {
-            toggle = 0;
-            hue_index = hue_index + 10;
-        } else if (brightness_index <= 0) {
-            toggle = 1;
-            hue_index = hue_index + 10;
-        }
-
-        if (toggle) {
-            brightness_index++;
-        } else {
-            brightness_index--;
-        }
-
-        if (hue_index >= 255) {
-            hue_index = 0;
-        }
-
-        delayMultiplier = 2;
-        showleds();
-    }
-
     //EFFECT NOISE
     if (effectString == "noise") {
         fadeToBlackBy(leds, NUM_LEDS, 20);
