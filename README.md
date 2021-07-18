@@ -18,6 +18,9 @@ For my use case, the project allows for:
 - 18 awg cable
 - aluminium profiles with frosted diffusers
 
+## Schematics
+![schematics](https://raw.githubusercontent.com/robertalexa/staircase-lights/master/schematics/schematics.jpg)
+
 ## Before you start
 1. Rename `secrets.example.h` to `secrets.h` and fill in your credentials
 2. Check that the device PINs match your setup
