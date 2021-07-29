@@ -473,7 +473,7 @@ void loop()
 }
 
 // Fade light each step strip
-void colourBottomToTop(int inR, int inG, int inB, uint16_t wait)
+void colourTopToBottom(int inR, int inG, int inB, uint16_t wait)
 {
     for (uint16_t j = steps; j > 0; j--) {
         int start = ledsPerStep * j;                                // starting LED per step basis
@@ -487,7 +487,7 @@ void colourBottomToTop(int inR, int inG, int inB, uint16_t wait)
     }
 }
 
-void colourTopToBottom(int inR, int inG, int inB, uint16_t wait)
+void colourBottomToTop(int inR, int inG, int inB, uint16_t wait)
 {
     for (uint16_t j = 0; j < steps; j++) {
         int start = ledsPerStep * j;                                // starting LED per step basis
