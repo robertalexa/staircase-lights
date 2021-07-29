@@ -443,7 +443,7 @@ void loop()
             if (ledStatus == 0) {
                 // lights up the strip from top to bottom
                 Serial.println("Top PIR motion detected");
-                colourTopToBottom(255, 144, 97, 100);      // Warm White
+                colourTopToBottom(255, 131, 40, 100);      // Warm White
                 ledStatus = 1;
             }
         }
@@ -452,7 +452,7 @@ void loop()
             if (ledStatus == 0) {
                 // lights up the strip from bottom to top
                 Serial.println ("Bottom PIR motion detected");
-                colourBottomToTop(255, 144, 97, 100);      // Warm White
+                colourBottomToTop(255, 131, 40, 100);      // Warm White
                 ledStatus = 1;
             }
         }
