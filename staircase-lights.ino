@@ -34,7 +34,7 @@ const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
 
 /******************************  FastLED Defintions ************************************/
-#define NUM_LEDS    50          // Total number of LEDs
+#define NUM_LEDS    481         // Total number of LEDs 480 + 1 sacrificial
 #define DATA_PIN    0           // pin for the NEOPIXEL = D3
 #define CHIPSET     WS2812
 #define COLOR_ORDER GRB
@@ -47,10 +47,10 @@ byte red = 255;
 byte green = 255;
 byte blue = 255;
 
-byte motionBrightness = 25;               // Adjust LEDs brightness. 0 to 255
+byte motionBrightness = 25;                         // Adjust LEDs brightness. 0 to 255
 byte brightness = 127;
-const int steps = 5;                        // Total number of steps
-const int ledsPerStep = NUM_LEDS / steps;   // Total LEDs per step
+const int steps = 12;                               // Total number of steps 12
+const int ledsPerStep = (NUM_LEDS - 1) / steps;     // Total LEDs per step
 
 
 /*****************************  Sensors Definitions ************************************/
@@ -145,33 +145,29 @@ struct CRGB leds[NUM_LEDS];
 /********************************** START SETUP *****************************************/
 void setup()
 {
+    delay(3000); // 3 second delay for recovery
+    
     Serial.begin(115200);
     Serial.println("Starting up...");
-
-    FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-
-    setupStripedPalette(CRGB::Red, CRGB::Red, CRGB::White, CRGB::White); //for CANDY CANE
-    setupHJPalette(CRGB::Red, CRGB::Red, CRGB::Green, CRGB::Green); //for Holly Jolly
 
     setup_wifi();
     setup_mqtt();
     setup_ota();
 
+    FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+    FastLED.setBrightness(brightness);
+
+    setupStripedPalette(CRGB::Red, CRGB::Red, CRGB::White, CRGB::White); //for CANDY CANE
+    setupHJPalette(CRGB::Red, CRGB::Red, CRGB::Green, CRGB::Green); //for Holly Jolly
+
     pinMode(pirTop, INPUT_PULLUP);          // for PIR at top of staircase initialise the input pin and use the internal resistor
     pinMode(pirBottom, INPUT_PULLUP);       // for PIR at bottom of staircase initialise the input pin and use the internal resistor
-
-    Serial.println("Ready");
-    Serial.print("IP Address: ");
-    Serial.println(WiFi.localIP());
-
-    delay(2000); // it takes the sensor 2 seconds to scan the area around it before it can detect infrared presence.
 }
 
 
 /********************************** START SETUP WIFI *****************************************/
 void setup_wifi()
 {
-    delay(10);
     // We start by connecting to a WiFi network
     Serial.println();
     Serial.print("Connecting to ");
@@ -448,7 +444,7 @@ void loop()
     pirBottomValue = digitalRead(pirBottom);
     ldrSensorValue = analogRead(ldrSensor);
 
-    if ((pirTopValue == HIGH || pirBottomValue == HIGH) && ldrSensorValue > 200) { // Motion and Darkness
+    if ((pirTopValue == HIGH || pirBottomValue == HIGH) && ldrSensorValue < 200) { // Motion and Darkness
         pirTimeout = millis(); // Timestamp when the PIR was triggered.
         if (pirTopValue == HIGH && direction != 2) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the top of the staircase before decending but will not allow the bottom PIR to reset pirTimeout as you descend past it.
             direction = 1;
@@ -464,6 +460,7 @@ void loop()
             if (ledStatus == 0) {
                 // lights up the strip from bottom to top
                 Serial.println ("Bottom PIR motion detected");
+                //colourBottomToTop(255, 144, 97, 100);      // Warm White
                 colourBottomToTop(255, 197, 143, 100);      // Warm White
                 ledStatus = 1;
             }
