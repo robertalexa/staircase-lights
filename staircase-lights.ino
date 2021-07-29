@@ -432,36 +432,37 @@ void loop()
     showleds();
     FastLED.setBrightness(motionBrightness);
 
-    // Constantly poll the sensors
-    pirTopValue = digitalRead(pirTop);
-    pirBottomValue = digitalRead(pirBottom);
     ldrSensorValue = analogRead(ldrSensor);
 
     Serial.println(ldrSensorValue); //prints the values coming from the sensor on the screen
+    if (ldrSensorValue < 60) {
+        pirTopValue = digitalRead(pirTop);
+        pirBottomValue = digitalRead(pirBottom);
 
-    if ((pirTopValue == HIGH || pirBottomValue == HIGH) && ldrSensorValue < 80) { // Motion and Darkness
-        pirTimeout = millis(); // Timestamp when the PIR was triggered.
-        if (pirTopValue == HIGH && direction != 2) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the top of the staircase before decending but will not allow the bottom PIR to reset pirTimeout as you descend past it.
-            direction = 1;
-            if (ledStatus == 0) {
-                // lights up the strip from top to bottom
-                Serial.println("Top PIR motion detected");
-                colourTopToBottom(255, 197, 143, 100);    // Warm White
-                ledStatus = 1;
+        if (pirTopValue == HIGH || pirBottomValue == HIGH) { // Motion and Darkness
+            pirTimeout = millis(); // Timestamp when the PIR was triggered.
+            if (pirTopValue == HIGH && direction != 2) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the top of the staircase before decending but will not allow the bottom PIR to reset pirTimeout as you descend past it.
+                direction = 1;
+                if (ledStatus == 0) {
+                    // lights up the strip from top to bottom
+                    Serial.println("Top PIR motion detected");
+                    colourTopToBottom(255, 197, 143, 100);    // Warm White
+                    ledStatus = 1;
+                }
             }
-        }
-        if (pirBottomValue == HIGH && direction != 1) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the bottom of the staircase before ascending but will not allow the top PIR to reset pirTimeout as you ascent past it.
-            direction = 2;
-            if (ledStatus == 0) {
-                // lights up the strip from bottom to top
-                Serial.println ("Bottom PIR motion detected");
-                //colourBottomToTop(255, 144, 97, 100);      // Warm White
-                colourBottomToTop(255, 197, 143, 100);      // Warm White
-                ledStatus = 1;
+            if (pirBottomValue == HIGH && direction != 1) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the bottom of the staircase before ascending but will not allow the top PIR to reset pirTimeout as you ascent past it.
+                direction = 2;
+                if (ledStatus == 0) {
+                    // lights up the strip from bottom to top
+                    Serial.println ("Bottom PIR motion detected");
+                    //colourBottomToTop(255, 144, 97, 100);      // Warm White
+                    colourBottomToTop(255, 197, 143, 100);      // Warm White
+                    ledStatus = 1;
+                }
             }
         }
     }
-
+    
     if (pirTimeout + 4000 < millis() && direction > 0) { //switch off LEDs in the direction of travel.
         if (direction == 1) {
             colourTopToBottom(0, 0, 0, 50); // Off
