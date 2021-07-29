@@ -464,10 +464,10 @@ void loop()
 
     if (pirTimeout + 4000 < millis() && direction > 0) { //switch off LEDs in the direction of travel.
         if (direction == 1) {
-            colourTopToBottom(0, 0, 0, 100); // Off
+            colourTopToBottom(0, 0, 0, 50); // Off
         }
         if (direction == 2) {
-            colourBottomToTop(0, 0, 0, 100); // Off
+            colourBottomToTop(0, 0, 0, 50); // Off
         }
         direction = 0;
         ledStatus = 0;
