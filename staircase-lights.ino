@@ -430,7 +430,6 @@ void loop()
 
     // Motion Lights - only get here if stateOn is false (e.g no manual colour/effect)
     showleds();
-    FastLED.setBrightness(motionBrightness);
 
     ldrSensorValue = analogRead(ldrSensor);
 
@@ -488,6 +487,7 @@ void colourTopToBottom(int inR, int inG, int inB, uint16_t wait)
             leds[i - 1].blue  = inB;
         }
         leds[0].setRGB( 0, 0, 0);
+        FastLED.setBrightness(motionBrightness);
         FastLED.show();
         delay(wait);
     }
@@ -503,6 +503,7 @@ void colourBottomToTop(int inR, int inG, int inB, uint16_t wait)
             leds[i - 1].blue  = inB;
         }
         leds[0].setRGB( 0, 0, 0);
+        FastLED.setBrightness(motionBrightness);
         FastLED.show();
         delay(wait);
     }
