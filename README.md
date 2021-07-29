@@ -9,12 +9,12 @@ For my use case, the project allows for:
 ## Hardware
 - nodeMCU v3
 - 2 x AM312 PIR
-- 1 x LDR
-- 1 x 510 kOhm resistor for the LDR
+- 1 x Silonex Norps-12 LDR
+- 1 x 510 Ohm resistor for the LDR
 - 1 x 510 Ohm resistor for the LED Data wire
 - 1 x 1000uF capacitor for the power supply, between negative and positive.
 - WS2812B LEDs - 480 + 1 sacrificial - 40 per step - 12 steps
-- 5V power supply - make sure you get a power supply able to supply the required Amps, plus 20% to allow for good performance. The closer to the limit you use a PSU, the more heat it will generate and the worst performance it will have.
+- 5V 30A power supply - make sure you get a power supply able to supply the required Amps, plus 20% to allow for good performance. The closer to the limit you use a PSU, the more heat it will generate and the worst performance it will have. In my case I should have gone with a bit bigger but since my LEDs will never run at 100% brightness, they should never consume that much. The formula is no_of_leds x 0.06 = total_amps. Then you need to take into the account the power consumption of the micro controller.
 - 18 awg cable
 - aluminium profiles with frosted diffusers
 
