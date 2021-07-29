@@ -332,15 +332,6 @@ bool processJson(char* message)
         blue = doc["color"]["b"];
     }
 
-    if (doc.containsKey("color_temp")) {
-        //temp comes in as mireds, need to convert to kelvin then to RGB
-        int color_temp = doc["color_temp"];
-        unsigned int kelvin  = 1000000 / color_temp; //MILLION / color_temp;
-
-        temp2rgb(kelvin);
-
-    }
-
     if (doc.containsKey("brightness")) {
         brightness = doc["brightness"];
     }
@@ -930,62 +921,5 @@ void showleds()
     } else if (startFade) {
         setColor(0, 0, 0);
         startFade = false;
-    }
-}
-
-/*************************************** Converter ***********************************************/
-void temp2rgb(unsigned int kelvin)
-{
-    int tmp_internal = kelvin / 100.0;
-
-    // red
-    if (tmp_internal <= 66) {
-        red = 255;
-    } else {
-        float tmp_red = 329.698727446 * pow(tmp_internal - 60, -0.1332047592);
-        if (tmp_red < 0) {
-            red = 0;
-        } else if (tmp_red > 255) {
-            red = 255;
-        } else {
-            red = tmp_red;
-        }
-    }
-
-    // green
-    if (tmp_internal <= 66) {
-        float tmp_green = 99.4708025861 * log(tmp_internal) - 161.1195681661;
-        if (tmp_green < 0) {
-            green = 0;
-        } else if (tmp_green > 255) {
-            green = 255;
-        } else {
-            green = tmp_green;
-        }
-    } else {
-        float tmp_green = 288.1221695283 * pow(tmp_internal - 60, -0.0755148492);
-        if (tmp_green < 0) {
-            green = 0;
-        } else if (tmp_green > 255) {
-            green = 255;
-        } else {
-            green = tmp_green;
-        }
-    }
-
-    // blue
-    if (tmp_internal >= 66) {
-        blue = 255;
-    } else if (tmp_internal <= 19) {
-        blue = 0;
-    } else {
-        float tmp_blue = 138.5177312231 * log(tmp_internal - 10) - 305.0447927307;
-        if (tmp_blue < 0) {
-            blue = 0;
-        } else if (tmp_blue > 255) {
-            blue = 255;
-        } else {
-            blue = tmp_blue;
-        }
     }
 }
