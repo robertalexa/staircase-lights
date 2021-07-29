@@ -434,7 +434,7 @@ void loop()
     ldrSensorValue = analogRead(ldrSensor);
 
     Serial.println(ldrSensorValue); //prints the values coming from the sensor on the screen
-    if (ldrSensorValue < 60) {
+    if (ldrSensorValue < 20) {
         pirTopValue = digitalRead(pirTop);
         pirBottomValue = digitalRead(pirBottom);
 
