@@ -480,12 +480,13 @@ void loop()
 void colourTopToBottom(int inR, int inG, int inB, uint16_t wait)
 {
     for (uint16_t j = steps; j > 0; j--) {
-        int start = ledsPerStep * j;                                // starting LED per step basis
-        for (uint16_t i = start; i > start - ledsPerStep; i--) {    // loop LEDs on this step
+        int start = ledsPerStep * j + 1;                            // starting LED per step basis
+        for (uint16_t i = start; i >= start - ledsPerStep; i--) {    // loop LEDs on this step
             leds[i - 1].red   = inR;
             leds[i - 1].green = inG;
             leds[i - 1].blue  = inB;
         }
+        leds[0].setRGB( 0, 0, 0);
         FastLED.show();
         delay(wait);
     }
@@ -494,12 +495,13 @@ void colourTopToBottom(int inR, int inG, int inB, uint16_t wait)
 void colourBottomToTop(int inR, int inG, int inB, uint16_t wait)
 {
     for (uint16_t j = 0; j < steps; j++) {
-        int start = ledsPerStep * j;                                // starting LED per step basis
-        for (uint16_t i = start; i < start + ledsPerStep; i++) {    // loop LEDs on this step
+        int start = ledsPerStep * j + 1;                            // starting LED per step basis
+        for (uint16_t i = start; i <= start + ledsPerStep; i++) {    // loop LEDs on this step
             leds[i - 1].red   = inR;
             leds[i - 1].green = inG;
             leds[i - 1].blue  = inB;
         }
+        leds[0].setRGB( 0, 0, 0);
         FastLED.show();
         delay(wait);
     }
