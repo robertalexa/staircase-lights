@@ -156,6 +156,8 @@ void setup()
 
     FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setBrightness(brightness);
+    FastLED.clear();
+    FastLED.show();
 
     setupStripedPalette(CRGB::Red, CRGB::Red, CRGB::White, CRGB::White); //for CANDY CANE
     setupHJPalette(CRGB::Red, CRGB::Red, CRGB::Green, CRGB::Green); //for Holly Jolly
