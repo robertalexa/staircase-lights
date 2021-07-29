@@ -435,7 +435,9 @@ void loop()
     pirBottomValue = digitalRead(pirBottom);
     ldrSensorValue = analogRead(ldrSensor);
 
-    if ((pirTopValue == HIGH || pirBottomValue == HIGH) && ldrSensorValue < 200) { // Motion and Darkness
+    Serial.println(ldrSensorValue); //prints the values coming from the sensor on the screen
+
+    if ((pirTopValue == HIGH || pirBottomValue == HIGH) && ldrSensorValue < 150) { // Motion and Darkness
         pirTimeout = millis(); // Timestamp when the PIR was triggered.
         if (pirTopValue == HIGH && direction != 2) { // the 2nd term allows pirTimeout to be constantly reset if one lingers at the top of the staircase before decending but will not allow the bottom PIR to reset pirTimeout as you descend past it.
             direction = 1;
